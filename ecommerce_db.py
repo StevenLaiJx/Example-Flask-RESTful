@@ -78,6 +78,10 @@ class ECommerceDBHelper(object):
         if self.db_connector is not None:
             self.db_connector.close()
 
+    # Create crawling rules
+    def create_crawling_rules(self, crawling_rules):
+        pass
+
     # Create shops: Return error code
     def create_shops(self, shops_to_create):
         # Check database connector
@@ -87,136 +91,274 @@ class ECommerceDBHelper(object):
         if shops_to_create is None or len(shops_to_create) <= 0:
             return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shops(%s) to create were empty' % shops_to_create}
 
-    # Read shops: Return error code
-    def read_shops(self, shop_id, shops_read):
-        shops_read = []
-        # Check database connector
-        if self.db_connector is None:
-            return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
-        # Check requests and inputs
-        if shop_id is not None and len(shop_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%s) to read was invalid' % shop_id}
-
-    # Update shops: Return error code
-    def update_shops(self, shop_id, shops_to_update):
-        # Check database connector
-        if self.db_connector is None:
-            return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
-        # Check requests and inputs
-        if shop_id is None or len(shop_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%s) to update was invalid' % shop_id}
-        if shops_to_update is None or len(shops_to_update) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%s) to update were empty' % shops_to_update}
-
-    # Delete shops: Return error code
-    def delete_shops(self, shop_id, shops_deleted):
-        shops_deleted = []
-        # Check database connector
-        if self.db_connector is None:
-            return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
-        # Check requests and inputs
-        if shop_id is None or len(shop_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%s) to delete was invalid' % shop_id}
-    
-    # Create products: Return error code
-    def create_products(self, shop_id, products_to_create):
-        # Check database connector
-        if self.db_connector is None:
-            return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
-        # Check requests and inputs
-        if shop_id is None or len(shop_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%s) for product was invalid' % shop_id}
-        if products_to_create is None or len(products_to_create) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'products(%s) to create were empty' % products_to_create}
-
         # Create one by one
+        number_created = 0
+        all_existing = True
         with self.db_connector.cursor() as cursor:
-            for product in products_to_create:
-                product_found = False
-                # Check if product exiting
-                sql = 'SELECT ProductID FROM tProducts WHERE ShopID=%s AND ProductID=%s;'
-                cursor.execute(sql, (str(shop_id), str(product.get('product_id', '0'))))
+            # Get maximum shopid
+            max_shop_id = 0
+            sql = 'SELECT MAX(ShopID) AS MaxShopID FROM tShops'
+            cursor.execute(sql)
+            result_rows = cursor.fetchall()
+            for result_row in result_rows:
+                max_shop_id = int(result_row['MaxShopID'])
+                break
+
+            # Create one by one
+            for shop in shops_to_create:
+                # Check request shop
+                shop_type = int(shop.get('shop_type', 0))
+                shop_name = shop.get('shop_name', None)
+                shop_url = shop.get('shop_url', None)
+                if shop_type is None or shop_type <= 0 or shop_name is None or len(shop_name) <= 0 or shop_url is None or len(shop_url) <= 0:
+                    return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shops(%s) to create were error format' % shops_to_create}
+
+                # Check if existing
+                shop_existing = False
+                sql = 'SELECT ShopID FROM tShops WHERE ShopType=%d AND (ShopName=\'%s\' OR ShopURL=\'%s\');' % (shop_type, shop_name, shop_url)
+                cursor.execute(sql)
                 result_rows = cursor.fetchall()
                 for result_row in result_rows:
-                    if len(result_row['ProductID']) > 0:
-                        product_found = True
-                        break;
-                # Create if not found
-                if product_found is not True:
-                    sql = ('REPLACE INTO tProducts('
-                        'ShopID,ProductID,ProductName,CatalogName,ProductPrice,ComparePrice,ProductLink,ProductDescription,'
-                        'VariantID,Variant,SKU,Brand,HotSale,FirstCrawlingTime,LastCrawlingTime,CrawlingCounter) '
-                        'VALUES(%s,%s,%s,%s,%s,%s,%s,%s,'
-                        '%s,%s,%s,%s,%s,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),1);')
+                    if result_row['ShopID'] is not None and int(result_row['ShopID']) > 0:
+                        shop_existing = True
+                        break
+
+                # Create is not found
+                if shop_existing is not True:
+                    max_shop_id = max_shop_id + 1
+                    number_created = number_created + 1
+                    all_existing = False
+                    sql = ('REPLACE INTO tShops('
+                           'ShopID,ShopType,ShopName,ShopURL,CrawlingFrequency,CrawlingState,FirstCrawlingTime,LastCrawlingTime,CrawlingCounter) '
+                           'VALUES('
+                           '%s,%s,%s,%s,%s,0,CURRENT_TIMESTAMP(),CURRENT_TIMESTAMP(),0);')
                     cursor.execute(
                         sql, 
                         (
-                        str(shop_id), 
-                        str(product.get('product_id', '0')), 
-                        str(product.get('product_name', '')), 
-                        str(product.get('catalog_name', '')), 
-                        str(product.get('product_price', '')), 
-                        str(product.get('compare_price', '')), 
-                        str(product.get('product_link', '')), 
-                        str(product.get('product_details', '')), 
-                        str(product.get('variant_id', '0')), 
-                        str(product.get('variant', '')), 
-                        str(product.get('sku', '')), 
-                        str(product.get('brand', '')), 
-                        str(product.get('hot_sale', '0'))
+                        str(max_shop_id), 
+                        str(shop_type), 
+                        str(shop_name), 
+                        str(shop_url), 
+                        str(shop.get('crawling_freq', 3600))
                         )
                         )
                     self.db_connector.commit()
-                # Update if found
+                # Update if not found
                 else:
-                    sql = ('UPDATE tProducts '
-                        'SET CrawlingCounter=CrawlingCounter+1,LastCrawlingTime=CURRENT_TIMESTAMP() '
-                        'WHERE ShopID=%s AND ProductID=%s AND '
-                        'ProductName=%s AND CatalogName=%s AND '
-                        'ProductPrice=%s AND ComparePrice=%s AND '
-                        'ProductLink=%s AND ProductDescription=%s;')
+                    shop_id = int(shop.get('shop_id', 0))
+                    if shop_id is not None and shop_id > 0:
+                        sql = ('UPDATE tShops '
+                               'SET ShopType=%s,ShopName=%s,ShopURL=%s,CrawlingFrequency=%s '
+                               'WHERE ShopID=%s;')
+                        cursor.execute(
+                            sql, 
+                            (
+                            str(shop_type), 
+                            str(shop_name), 
+                            str(shop_url), 
+                            str(shop.get('crawling_freq', 3600)),
+                            str(shop_id)
+                            )
+                            )
+                        self.db_connector.commit()
+
+                # Update/Create rules
+                crawling_rules = shop.get('crawling_rules', None)
+                if crawling_rules is not None and len(crawling_rules) > 0:
+                    self.create_crawling_rules(crawling_rules)
+
+        # Return
+        if number_created > 0:
+            return {'errcode': StatusCode.CREATED.value, 'errmsg': '%d shops were created' % number_created}
+        else:
+            if all_existing is True:
+                return {'errcode': StatusCode.CREATED.value, 'errmsg': 'shops(%s) to create were existing' % shops_to_create}
+            else:
+                return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shops(%s) to create were error format' % shops_to_create}
+
+    # Read shops: Return error code
+    def read_shops(self, shop_ids_to_read, shops_read):
+        # Check database connector
+        if self.db_connector is None:
+            return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
+         
+        # Get recordset
+        with self.db_connector.cursor() as cursor:
+            # Encode sql
+            sql = ('SELECT ShopID,ShopType,ShopName,ShopURL,CrawlingFrequency,CrawlingState,'
+                   'UNIX_TIMESTAMP(IFNULL(FirstCrawlingTime,\'2000-01-01 00:00:00\')) AS FirstCrawlingTime,UNIX_TIMESTAMP(IFNULL(LastCrawlingTime,\'2000-01-01 00:00:00\')) AS LastCrawlingTime '
+                   'FROM tShops '
+                   'ORDER BY ShopID ASC;')
+            if shop_ids_to_read is not None and len(shop_ids_to_read) > 0:
+                sql = ('SELECT ShopID,ShopType,ShopName,ShopURL,CrawlingFrequency,CrawlingState,'
+                       'UNIX_TIMESTAMP(IFNULL(FirstCrawlingTime,\'2000-01-01 00:00:00\')) AS FirstCrawlingTime,UNIX_TIMESTAMP(IFNULL(LastCrawlingTime,\'2000-01-01 00:00:00\')) AS LastCrawlingTime '
+                       'FROM tShops '
+                       'WHERE ShopID IN (%s) '
+                       'ORDER BY ShopID ASC;' % ','.join([str(shop_id) for shop_id in shop_ids_to_read]))
+            cursor.execute(sql)
+            result_rows = cursor.fetchall()
+            for result_row in result_rows:
+                shop = {
+                    'shop_id':int(result_row['ShopID']),
+                    'shop_type':int(result_row['ShopType']),
+                    'shop_name':result_row['ShopName'],
+                    'shop_url':result_row['ShopURL'],
+                    'crawling_freq':int(result_row['CrawlingFrequency']),
+                    'crawling_state':int(result_row['CrawlingState']),
+                    'first_crawling':int(result_row['FirstCrawlingTime']),
+                    'last_crawling':int(result_row['LastCrawlingTime']),
+                }
+                shops_read.append(shop)
+
+        # Return
+        if len(shops_read) > 0:
+            return {'errcode': StatusCode.OK.value, 'errmsg': '%d shops were read' % len(shops_read)}
+        else:
+            return {'errcode': StatusCode.NOT_FOUND.value, 'errmsg': 'shop(s) were not found'}
+
+    # Update shops: Return error code
+    def update_shops(self, shop_ids_to_update, shops_to_update):
+        # Check database connector
+        if self.db_connector is None:
+            return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
+        # Check requests and inputs
+        if shops_to_update is None or len(shops_to_update) <= 0:
+            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shops(%s) to update were empty' % shops_to_update}
+
+        # Update one by one
+        number_updated = 0
+        with self.db_connector.cursor() as cursor:
+            for shop in shops_to_update:
+                # Check input shop
+                need_update = False
+                shop_type = int(shop.get('shop_type', 0))
+                shop_name = shop.get('shop_name', None)
+                shop_url = shop.get('shop_url', None)
+                if shop_type is None or shop_type <= 0 or shop_name is None or len(shop_name) <= 0 or shop_url is None or len(shop_url) <= 0:
+                    return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shops(%s) to update were error format' % shops_to_update}
+                req_shop_id = int(shop.get('shop_id', 0))
+                if shop_ids_to_update is None or len(shop_ids_to_update) <= 0:
+                    if req_shop_id <= 0:
+                        return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shops(%s) to update were error format' % shops_to_update}
+                    else:
+                        need_update = True
+                else:     
+                    for shop_id in shop_ids_to_update:
+                        if req_shop_id == int(shop_id):
+                            req_shop_id = int(shop_id)
+                            need_update = True
+                            break
+                if need_update is not True:
+                    continue
+
+                # Encode sql
+                with self.db_connector.cursor() as cursor:
+                    number_updated = number_updated + 1
+                    sql = ('UPDATE tShops '
+                           'SET ShopType=%s,ShopName=%s,ShopURL=%s,CrawlingFrequency=%s '
+                           'WHERE ShopID=%s;')
                     cursor.execute(
                         sql, 
                         (
-                        str(shop_id), 
-                        str(product.get('product_id', '0')), 
-                        str(product.get('product_name', '')), 
-                        str(product.get('catalog_name', '')), 
-                        str(product.get('product_price', '')), 
-                        str(product.get('compare_price', '')), 
-                        str(product.get('product_link', '')), 
-                        str(product.get('product_details', ''))
+                        str(shop_type), 
+                        str(shop_name), 
+                        str(shop_url), 
+                        str(shop.get('crawling_freq', 3600)),
+                        str(shop_id)
                         )
                         )
                     self.db_connector.commit()
-            
+
+                # Update/Create rules
+                crawling_rules = shop.get('crawling_rules', None)
+                if crawling_rules is not None and len(crawling_rules) > 0:
+                    self.create_crawling_rules(crawling_rules)
+
+        # Return
+        if number_updated >= 0:
+            return {'errcode': StatusCode.OK.value, 'errmsg': '%d shops were updated' % number_updated}
+        else:
+            return {'errcode': StatusCode.NOT_FOUND.value, 'errmsg': 'shops(%s) were not created' % shops_to_update}
+
+    # Delete shops: Return error code
+    def delete_shops(self, shop_ids_to_delete, shops_deleted):
+        # Check database connector
+        if self.db_connector is None:
+            return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
+        # Check requests and inputs
+        if shop_ids_to_delete is None or len(shop_ids_to_delete) <= 0:
+            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shops(%s) to delete were invalid' % shop_ids_to_delete}
+
+        # Get/Set into database
+        with self.db_connector.cursor() as cursor:
+            # Encode condition
+            shop_ids_condition = ','.join([str(shop_id) for shop_id in shop_ids_to_delete])
+
+            # Get shops to deleted
+            sql = ('SELECT ShopID,ShopType,ShopName,ShopURL,CrawlingFrequency,CrawlingState,'
+                   'UNIX_TIMESTAMP(IFNULL(FirstCrawlingTime,\'2000-01-01 00:00:00\')) AS FirstCrawlingTime,UNIX_TIMESTAMP(IFNULL(LastCrawlingTime,\'2000-01-01 00:00:00\')) AS LastCrawlingTime '
+                   'FROM tShops '
+                   'WHERE ShopID IN (%s) '
+                   'ORDER BY ShopID ASC;' % shop_ids_condition)
+            cursor.execute(sql)
+            result_rows = cursor.fetchall()
+            for result_row in result_rows:
+                shop = {
+                    'shop_id':int(result_row['ShopID']),
+                    'shop_type':int(result_row['ShopType']),
+                    'shop_name':result_row['ShopName'],
+                    'shop_url':result_row['ShopURL'],
+                    'crawling_freq':int(result_row['CrawlingFrequency']),
+                    'crawling_state':int(result_row['CrawlingState']),
+                    'first_crawling':int(result_row['FirstCrawlingTime']),
+                    'last_crawling':int(result_row['LastCrawlingTime']),
+                }
+                shops_deleted.append(shop)
+
+            # Delete selected shop
+            sql = 'DELETE FROM tShops WHERE ShopID IN (%s);' % shop_ids_condition
+            cursor.execute(sql)
+            self.db_connector.commit()
+
+        # Return
+        if len(shops_deleted) > 0:
+            return {'errcode': StatusCode.OK.value, 'errmsg': '%d shops were deleted' % len(shops_deleted)}
+        else:
+            return {'errcode': StatusCode.NOT_FOUND.value, 'errmsg': 'shops(%d) were not found' % int(shop_id)}
 
     # Read products: Return error code
-    def read_products(self, shop_id, product_id, products_read):
+    def read_products(self, shop_id, product_ids_to_read, products_read):
          # Check database connector
         if self.db_connector is None:
             return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
         # Check requests and inputs
-        if shop_id is None or len(shop_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%s) for product was invalid' % shop_id}
-        if product_id is not None and len(product_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'product(%s) to read was invalid' % product_id}
+        if shop_id is None or int(shop_id) <= 0:
+            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%s) for product was invalid' % int(shop_id)}
+        if product_ids_to_read is not None and len(product_ids_to_read) <= 0:
+            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'products(%s) to read were invalid' % product_ids_to_read}
         
-        # Encode sql
-        sql = ('SELECT ProductID,ProductName,CatalogName,ProductPrice,ComparePrice,ProductLink,ProductDescription,'
-               'VariantID,Variant,SKU,Brand,HotSale,UNIX_TIMESTAMP(IFNULL(FirstCrawlingTime,\'2000-01-01 00:00:00\')) AS FirstCrawlingTime,UNIX_TIMESTAMP(IFNULL(LastCrawlingTime,\'2000-01-01 00:00:00\')) AS LastCrawlingTime,CrawlingCounter '
-               'FROM tProducts '
-               'WHERE ShopID=%s '
-               'ORDER BY ProductID ASC;' % shop_id)
-        if product_id is not None and len(product_id) > 0:
-            sql = ('SELECT ProductID,ProductName,CatalogName,ProductPrice,ComparePrice,ProductLink,ProductDescription,'
-                   'VariantID,Variant,SKU,Brand,HotSale,UNIX_TIMESTAMP(IFNULL(FirstCrawlingTime,\'2000-01-01 00:00:00\')) AS FirstCrawlingTime,UNIX_TIMESTAMP(IFNULL(LastCrawlingTime,\'2000-01-01 00:00:00\')) AS LastCrawlingTime,CrawlingCounter '
-                   'FROM tProducts '
-                   'WHERE ShopID=%s AND ProductID=%s '
-                   'ORDER BY ProductID ASC;' % (shop_id, product_id))
-         
         # Get recordset
         with self.db_connector.cursor() as cursor:
+            # Encode sql
+            sql = ('SELECT ProductID,ProductName,CatalogName,ProductPrice,ComparePrice,ProductLink,ProductDescription,'
+                   'VariantID,Variant,SKU,Brand,HotSale,'
+                   'UNIX_TIMESTAMP(IFNULL(FirstCrawlingTime,\'2000-01-01 00:00:00\')) AS FirstCrawlingTime,'
+                   'UNIX_TIMESTAMP(IFNULL(LastCrawlingTime,\'2000-01-01 00:00:00\')) AS LastCrawlingTime,'
+                   'CrawlingCounter '
+                   'FROM tProducts '
+                   'WHERE ShopID=%d '
+                   'ORDER BY ProductID ASC;' % int(shop_id))
+            if product_ids_to_read is not None and len(product_ids_to_read) > 0:
+                sql = ('SELECT ProductID,ProductName,CatalogName,ProductPrice,ComparePrice,ProductLink,ProductDescription,'
+                       'VariantID,Variant,SKU,Brand,HotSale,'
+                       'UNIX_TIMESTAMP(IFNULL(FirstCrawlingTime,\'2000-01-01 00:00:00\')) AS FirstCrawlingTime,'
+                       'UNIX_TIMESTAMP(IFNULL(LastCrawlingTime,\'2000-01-01 00:00:00\')) AS LastCrawlingTime,'
+                       'CrawlingCounter '
+                       'FROM tProducts '
+                       'WHERE ShopID=%d AND ProductID IN (%s) '
+                       'ORDER BY ProductID ASC;' % (int(shop_id), ','.join([str(product_id) for product_id in product_ids_to_read])))
+
+            # Execute and get recordset
             cursor.execute(sql)
             result_rows = cursor.fetchall()
             for result_row in result_rows:
@@ -232,42 +374,151 @@ class ECommerceDBHelper(object):
                     'variant':result_row['Variant'],
                     'sku':result_row['SKU'],
                     'brand':result_row['Brand'],
-                    'hot_sale':result_row['HotSale'],
-                    'first_crawling':result_row['FirstCrawlingTime'],
-                    'last_crawling':result_row['LastCrawlingTime'],
-                    'crawling_counter':result_row['CrawlingCounter']
+                    'hot_sale':int(result_row['HotSale']),
+                    'first_crawling':int(result_row['FirstCrawlingTime']),
+                    'last_crawling':int(result_row['LastCrawlingTime']),
+                    'crawling_counter':int(result_row['CrawlingCounter'])
                 }
                 products_read.append(product)
 
         # Return
         if len(products_read) > 0:
-            return {'errcode': StatusCode.OK.value, 'errmsg': '%d products read' % len(products_read)}
+            return {'errcode': StatusCode.OK.value, 'errmsg': '%d products were read' % len(products_read)}
         else:
-            return {'errcode': StatusCode.NOT_FOUND.value, 'errmsg': 'product(s) not found'}
+            return {'errcode': StatusCode.NOT_FOUND.value, 'errmsg': 'product(s) were not found'}
 
     # Update products: Return error code
-    def update_products(self, shop_id, product_id, products_to_update):
+    def update_products(self, shop_id, product_ids_to_update, products_to_update):
         # Check database connector
         if self.db_connector is None:
             return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
         # Check requests and inputs
-        if shop_id is None or len(shop_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%s) for product was invalid' % shop_id}
-        if product_id is None or len(product_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'product(%s) to update was invalid' % product_id}
+        if shop_id is None or int(shop_id) <= 0:
+            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%d) for product was invalid' % int(shop_id)}
         if products_to_update is None or len(products_to_update) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'product(%s) to update was empty' % products_to_update}
+            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'products(%s) to update were empty' % products_to_update}
+
+        # Update one by one
+        number_updated = 0
+        with self.db_connector.cursor() as cursor:
+            for product in products_to_update:
+                # Check input product
+                need_update = False
+                req_product_id = product.get('product_id', None)
+                product_name = product.get('product_name', None)
+                if req_product_id is None or len(req_product_id) <= 0 or product_name is None or len(product_name) <= 0:
+                    return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'products(%s) to update were error format' % products_to_update}
+                if product_ids_to_update is None or len(product_ids_to_update) <= 0:
+                    if req_product_id <= 0:
+                        return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'products(%s) to update were error format' % products_to_update}
+                    else:
+                        need_update = True
+                else:     
+                    for product_id in product_ids_to_update:
+                        if req_product_id == product_id:
+                            req_product_id = product_id
+                            need_update = True
+                            break
+                if need_update is not True:
+                    continue
+                catalog_name = product.get('catalog_name', '')
+                product_price = product.get('product_price', '')
+                compare_price = product.get('compare_price', '')
+                product_link = product.get('product_link', '')
+                product_details = product.get('product_details', '')
+                variant_id = product.get('variant_id', '')
+                variant = product.get('variant', '')
+                sku = product.get('sku', '')
+                brand = product.get('brand', '')
+                hot_sale = int(product.get('hot_sale', 0))
+
+                # Encode sql
+                with self.db_connector.cursor() as cursor:
+                    number_updated = number_updated + 1
+                    sql = ('UPDATE tProducts '
+                           'SET ProductName=%s,CatalogName=%s,ProductPrice=%s,ComparePrice=%s,ProductLink=%s,ProductDescription=%s,VariantID=%s,Variant=%s,SKU=%s,Brand=%s,HotSale=%s '
+                           'WHERE ShopID=%s AND ProductID=%s;')
+                    cursor.execute(
+                        sql, 
+                        (
+                        str(product_name), 
+                        str(catalog_name), 
+                        str(product_price), 
+                        str(compare_price),
+                        str(product_link),
+                        str(product_details),
+                        str(variant_id),
+                        str(variant),
+                        str(sku),
+                        str(brand),
+                        str(hot_sale),
+                        str(shop_id),
+                        str(req_product_id)
+                        )
+                        )
+                    self.db_connector.commit()
+
+        # Return
+        if number_updated >= 0:
+            return {'errcode': StatusCode.OK.value, 'errmsg': '%d products were updated' % number_updated}
+        else:
+            return {'errcode': StatusCode.NOT_FOUND.value, 'errmsg': 'products(%s) were not created' % products_to_update}
 
     # Delete products: Return error code
-    def delete_products(self, shop_id, product_id, products_deleted):
-        products_deleted = []
+    def delete_products(self, shop_id, product_ids_to_delete, products_deleted):
         # Check database connector
         if self.db_connector is None:
             return {'errcode': StatusCode.INTERNAL_SERVER_ERROR.value, 'errmsg': 'database connector was null'}
         # Check requests and inputs
-        if shop_id is None or len(shop_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%s) for product was invalid' % shop_id}
-        if product_id is None or len(product_id) <= 0:
-            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'product(%s) to delete was invalid' % product_id}
+        if shop_id is None or int(shop_id) <= 0:
+            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'shop(%d) for product was invalid' % int(shop_id)}
+        if product_ids_to_delete is None or len(product_ids_to_delete) <= 0:
+            return {'errcode': StatusCode.BAD_REQUEST.value, 'errmsg': 'products(%s) to delete were invalid' % product_ids_to_delete}
+
+        # Get/Set into database
+        with self.db_connector.cursor() as cursor:
+            # Get products to deleted
+            sql = ('SELECT ProductID,ProductName,CatalogName,ProductPrice,ComparePrice,ProductLink,ProductDescription,'
+                   'VariantID,Variant,SKU,Brand,HotSale,'
+                   'UNIX_TIMESTAMP(IFNULL(FirstCrawlingTime,\'2000-01-01 00:00:00\')) AS FirstCrawlingTime,'
+                   'UNIX_TIMESTAMP(IFNULL(LastCrawlingTime,\'2000-01-01 00:00:00\')) AS LastCrawlingTime,'
+                   'CrawlingCounter '
+                   'FROM tProducts '
+                   'WHERE ShopID=%d AND ProductID IN (%s) '
+                   'ORDER BY ProductID ASC;' % (int(shop_id), ','.join([str(product_id) for product_id in product_ids_to_delete])))
+
+            # Execute and get recordset
+            cursor.execute(sql)
+            result_rows = cursor.fetchall()
+            for result_row in result_rows:
+                product = {
+                    'product_id':result_row['ProductID'],
+                    'product_name':result_row['ProductName'],
+                    'catalog_name':result_row['CatalogName'],
+                    'product_price':result_row['ProductPrice'],
+                    'compare_price':result_row['ComparePrice'],
+                    'product_link':result_row['ProductLink'],
+                    'product_details':result_row['ProductDescription'],
+                    'variant_id':result_row['VariantID'],
+                    'variant':result_row['Variant'],
+                    'sku':result_row['SKU'],
+                    'brand':result_row['Brand'],
+                    'hot_sale':int(result_row['HotSale']),
+                    'first_crawling':int(result_row['FirstCrawlingTime']),
+                    'last_crawling':int(result_row['LastCrawlingTime']),
+                    'crawling_counter':int(result_row['CrawlingCounter'])
+                }
+                products_deleted.append(product)
+
+            # Delete selected products
+            sql = 'DELETE FROM tProducts WHERE ShopID=%d AND ProductID IN (%s);' % (int(shop_id), ','.join([str(product_id) for product_id in product_ids_to_delete]))
+            cursor.execute(sql)
+            self.db_connector.commit()
+
+        # Return
+        if len(products_deleted) > 0:
+            return {'errcode': StatusCode.OK.value, 'errmsg': '%d products of shop(%d) were deleted' % (len(products_deleted), int(shop_id))}
+        else:
+            return {'errcode': StatusCode.NOT_FOUND.value, 'errmsg': 'products(%s) of shop(%d) were not found' % (product_ids_to_delete, int(shop_id))}
 
     
