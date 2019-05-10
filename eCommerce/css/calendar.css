@@ -1,0 +1,195 @@
+@charset "utf-8";
+/* CSS Document */
+.month-container ul, .month-container li{
+	list-style:none;
+}
+
+.clear{
+	clear:both;
+}
+.month-container{
+	height:auto;
+	position:relative;
+	margin:0 auto;
+	padding:0;
+	background:#fff;
+	border:1px solid #a8a8a8;
+	height:281px;
+}
+.month-head{
+    font-size:24px;
+	height:38px;
+	line-height:38px;
+	text-align:center;
+}
+
+.month-head span {
+    color: #535353;
+	line-height:30px;
+}
+.preTip {
+	position:absolute;
+	left:15px;
+	top:10px;
+	height:22px;
+	width:22px;
+	cursor:pointer;
+	background:url(/images/imgPN.png) no-repeat 0 -28px;
+	}
+.nextTip {
+	position:absolute;
+	right:15px;
+	top:10px;
+	height:22px;
+	width:22px;
+	cursor:pointer;
+	background:url(/images/imgPN.png) no-repeat right -28px;
+	}
+.selMonth {
+	position:absolute;
+	right:45px;
+	top:11px;
+	margin:0;
+	padding:0;
+	height:20px;
+	width:24px;
+	border:none;
+	cursor:pointer;
+	border-radius:0;
+	background:url(/images/calendar.png) no-repeat 0 0;
+	}
+.tipsLab {
+	top:75%;
+	left:0;
+	position:absolute;
+	min-height:80px;
+	width:180px;
+	padding:5px;
+	color:#535353;
+	font-size:14px;
+	text-align:left;
+	line-height:1.4em;
+	background:#ffffde;
+	border:1px solid #a8a8a8;
+	border-radius: 6px;
+	z-index:9;
+	display:none;
+	}
+.tipsLab h5{
+	margin:0;
+	line-height:2em;
+	font-size:14px;
+	text-indent:0;
+	}
+.tipsLab .lab{
+	position:absolute;
+	top:-8px;
+	left:20px;
+	width:15px;
+	height:8px;
+	background:url(/images/tipBg_Up.png) no-repeat left top;
+	}
+.month-content, .month-body {
+	margin:0 auto;
+	padding-left:2%;
+	position:relative;
+	}
+.month-cell {
+    float: left;
+	width:14%;
+	height:35px;
+	background:#ececec;
+}
+
+.month-cell span {
+    display: block;
+    color: #cccccc;
+    font-size:20px;
+    text-align: center;
+	border-left:1px solid #ececec;
+	border-right:1px solid #ececec;
+	border-top:1px solid #ececec;
+	border-bottom:1px solid #ececec;
+	position:relative;
+	text-align:left;
+	line-height:35px;
+	text-indent:.5em;
+	background:#ececec;
+}
+
+.month-cell.active span {
+}
+
+.month-cell.bg {
+    background: #fff;
+}
+.month-cell.bg span {
+    color: #535353;
+    background: #fff;
+}
+
+.month-cell.bg01 span {
+    background: #ff9999;
+	cursor:pointer;
+}
+.month-cell.bg02 span {
+    background: #ff7777;
+	cursor:pointer;
+}
+.month-cell.bg03 span {
+    background:#ee4444; color:#fff;
+	cursor:pointer;
+}
+.month-cell.bg04 span {
+    background:#bb0000; color:#fff;
+	cursor:pointer;
+}
+.month-cell.bg05 span {
+    background:#990000; color:#fff;
+	cursor:pointer;
+}
+
+
+.month-cell.bg.active span {
+}
+
+.month-cell.orange.active span {
+}
+
+.month-cell.current {
+    background: #bebebe;
+}
+
+.month-cell.current span {
+    color: #ffffff;
+    background: #bebebe;
+}
+
+
+.month-cell.blue {
+	background: #686868;
+	line-height:25px;
+	height:25px;
+}
+
+.month-cell.blue span {
+	background: #686868;
+    color: #fff;
+	line-height:25px;
+	height:25px;
+	text-align:center;
+	text-indent:0;
+}
+
+
+.flipContainer{
+	height:100px;
+	background:#FFF;
+	padding:10px;
+}
+
+.flip{
+	background:url(/images/filmstrip.png);
+	float:left;
+	height:103px;
+}

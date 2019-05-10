@@ -1,0 +1,712 @@
+@charset "utf-8";
+/* CSS Document */
+#Content .lt {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round.png) right bottom;
+	position:absolute;
+	left:-1px;
+	top:-1px;
+	}
+#Content .rt {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round.png) left bottom;
+	position:absolute;
+	right:-1px;
+	top:-1px;
+	}
+#Content .lb {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round.png) right top;
+	position:absolute;
+	left:-1px;
+	bottom:-1px;
+	}
+#Content .rb {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round.png) left top;
+	position:absolute;
+	right:-1px;
+	bottom:-1px;
+	}
+#Content_bg{  
+	position:absolute;
+	top:5px;
+	left:3px;
+	z-index:0;
+	width:100%;
+	height:100%;
+	}
+#Content_bg .bg{  
+	background-color:#d9d9d9;
+	position:relative;
+	min-height:550px;
+	height:100%;
+	}
+#homeMainInfo #Content_bg .bg{  
+	background-color:#d9d9d9;
+	position:relative;
+	min-height:334px;
+	height:99.5%;
+	}
+#Content_bg .lt {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round2.png) right bottom;
+	position:absolute;
+	left:0;
+	top:0;
+	}
+#Content_bg .rt {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round2.png) left bottom;
+	position:absolute;
+	right:0;
+	top:0;
+	}
+#Content_bg .lb {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round2.png) right top;
+	position:absolute;
+	left:0;
+	bottom:0;
+	}
+#Content_bg .rb {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round2.png) left top;
+	position:absolute;
+	right:0;
+	bottom:0;
+	}
+.menu li{
+	background: #fff;
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#cdcdcd') !important; /* IE6 & IE7 */ 
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#cdcdcd')" !important; /* IE8 */
+	}
+.menu a .lt{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) right bottom;
+	position:absolute;
+	left:-1px;
+	top:-1px;
+	}
+.menu a .rt{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) left bottom;
+	position:absolute;
+	right:-1px;
+	top:-1px;
+	}
+.reportList h4 span{
+	height:23px;
+	width:66px;
+	padding:0;
+	text-align:center;
+	line-height:23px;
+	border:none;
+	background:url(/images/button.png) no-repeat left top;
+	}
+.menu a.on .lt, #Content .reportList .lt{
+	background-image:url(/images/round4.png);
+	}
+.menu a.on .rt, #Content .reportList .rt{
+	background-image:url(/images/round4.png);
+	}
+.emailLabel .label1 .mlt{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round6.png) right bottom;
+	position:absolute;
+	left:-1px;
+	top:-1px;
+	}
+.emailLabel .label1 .mlb{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round6.png) right top;
+	position:absolute;
+	left:-1px;
+	bottom:-1px;
+	}
+.emailLabel .label1.on .mlt{
+	background:url(/images/round5.png) right bottom;
+	}
+.emailLabel .label1.on .mlb{
+	background:url(/images/round5.png) right top;
+	}
+.emailLabel .label3 .mrt{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round6.png) left bottom;
+	position:absolute;
+	right:-1px;
+	top:-1px;
+	}
+.emailLabel .label3 .mrb{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round6.png) left top;
+	position:absolute;
+	right:-1px;
+	bottom:-1px;
+	}
+.emailLabel .label3.on .mrt{
+	background:url(/images/round5.png) left bottom;
+	}
+.emailLabel .label3.on .mrb{
+	background:url(/images/round5.png) left top;
+	}
+#Content .pageTitle ul a {
+	position:relative;
+}	
+#Content .pageTitle a.first.on .lt{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round4.png) right bottom;
+	position:absolute;
+	left:-1px;
+	top:-1px;
+	}
+#Content .pageTitle a.first.on .lb{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round4.png) right top;
+	position:absolute;
+	left:-1px;
+	bottom:-1px;
+	}
+#Content .pageTitle a.first .lt{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) right bottom;
+	position:absolute;
+	left:-1px;
+	top:-1px;
+	}
+#Content .pageTitle a.first .lb{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) right top;
+	position:absolute;
+	left:-1px;
+	bottom:-1px;
+	}
+#Content .pageTitle a.last.on .rt{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round4.png) left bottom;
+	position:absolute;
+	right:-1px;
+	top:-1px;
+	}
+#Content .pageTitle a.last.on .rb{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round4.png) left top;
+	position:absolute;
+	right:-1px;
+	bottom:-1px;
+	}
+#Content .pageTitle a.last .rt{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) left bottom;
+	position:absolute;
+	right:-1px;
+	top:-1px;
+	}
+#Content .pageTitle a.last .rb{
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) left top;
+	position:absolute;
+	right:-1px;
+	bottom:-1px;
+	}
+#Content .pageTitle.fourLabel a.first.on .lt{
+	background:url(/images/round9.png) right bottom;
+	}
+#Content .pageTitle.fourLabel a.first.on .lb{
+	background:url(/images/round9.png) right top;
+	}
+#Content .pageTitle.fourLabel a.first .lt{
+	background:url(/images/round8.png) right bottom;
+	}
+#Content .pageTitle.fourLabel a.first .lb{
+	background:url(/images/round8.png) right top;
+	}
+#Content .pageTitle.fourLabel a.last.on .rt{
+	background:url(/images/round9.png) left bottom;
+	}
+#Content .pageTitle.fourLabel a.last.on .rb{
+	background:url(/images/round9.png) left top;
+	}
+#Content .pageTitle.fourLabel a.last .rt{
+	background:url(/images/round8.png) left bottom;
+	}
+#Content .pageTitle.fourLabel a.last .rb{
+	background:url(/images/round8.png) left top;
+	}
+#Content .pageTitle.fiveLabel a.first.on .lt{
+	background:url(/images/round9.png) right bottom;
+	}
+#Content .pageTitle.fiveLabel a.first.on .lb{
+	background:url(/images/round9.png) right top;
+	}
+#Content .pageTitle.fiveLabel a.first .lt{
+	background:url(/images/round8.png) right bottom;
+	}
+#Content .pageTitle.fiveLabel a.first .lb{
+	background:url(/images/round8.png) right top;
+	}
+#Content .pageTitle.fiveLabel a.last.on .rt{
+	background:url(/images/round9.png) left bottom;
+	}
+#Content .pageTitle.fiveLabel a.last.on .rb{
+	background:url(/images/round9.png) left top;
+	}
+#Content .pageTitle.fiveLabel a.last .rt{
+	background:url(/images/round8.png) left bottom;
+	}
+#Content .pageTitle.fiveLabel a.last .rb{
+	background:url(/images/round8.png) left top;
+	}
+#Content .pageTitle.rightLabel a.first.on .lt{
+	background:url(/images/round4.png) right bottom;
+	}
+#Content .pageTitle.rightLabel a.first.on .lb{
+	background:url(/images/round4.png) right top;
+	}
+#Content .pageTitle.rightLabel a.first .lt{
+	background:url(/images/round3.png) right bottom;
+	}
+#Content .pageTitle.rightLabel a.first .lb{
+	background:url(/images/round3.png) right top;
+	}
+#Content .pageTitle.rightLabel a.last.on .rt{
+	background:url(/images/round4.png) left bottom;
+	}
+#Content .pageTitle.rightLabel a.last.on .rb{
+	background:url(/images/round4.png) left top;
+	}
+#Content .pageTitle.rightLabel a.last .rt{
+	background:url(/images/round3.png) left bottom;
+	}
+#Content .pageTitle.rightLabel a.last .rb{
+	background:url(/images/round3.png) left top;
+	}
+	
+	
+#Content .pageTitle.bottomLabel a.first.on .lt{
+	background:url(/images/round11.png) right bottom;
+	}
+#Content .pageTitle.bottomLabel a.first.on .lb{
+	background:url(/images/round11.png) right top;
+	}
+#Content .pageTitle.bottomLabel a.first .lt{
+	background:url(/images/round10.png) right bottom;
+	}
+#Content .pageTitle.bottomLabel a.first .lb{
+	background:url(/images/round10.png) right top;
+	}
+#Content .pageTitle.bottomLabel a.last.on .rt{
+	background:url(/images/round11.png) left bottom;
+	}
+#Content .pageTitle.bottomLabel a.last.on .rb{
+	background:url(/images/round11.png) left top;
+	}
+#Content .pageTitle.bottomLabel a.last .rt{
+	background:url(/images/round10.png) left bottom;
+	}
+#Content .pageTitle.bottomLabel a.last .rb{
+	background:url(/images/round10.png) left top;
+	}
+	
+#footer{
+	background: #f3f3f3; /* Fallback */
+	background: linear-gradient(top, #f1f1f1 0%,#cdcdcd 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#f1f1f1', endColorstr='#cdcdcd') !important; /* IE6 & IE7 */ 
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#f1f1f1', endColorstr='#cdcdcd')" !important; /* IE8 */
+	}
+#footer .lt {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) right bottom;
+	position:absolute;
+	left:-1px;
+	top:-1px;
+	}
+#footer .rt {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) left bottom;
+	position:absolute;
+	right:-1px;
+	top:-1px;
+	}
+#footer .lb {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) right top;
+	position:absolute;
+	left:-1px;
+	bottom:-1px;
+	}
+#footer .rb {
+	display:block;
+	width:5px;
+	height:5px;
+	background:url(/images/round3.png) left top;
+	position:absolute;
+	right:-1px;
+	bottom:-1px;
+	}
+button {
+	background:url(/images/button.png) no-repeat left top;
+	height:23px;
+	width:66px;
+	padding:0;
+	text-align:center;
+	line-height:23px;
+	border:none;
+	}
+button:hover {
+	background:url(/images/button.png) no-repeat right top;
+	}
+.inverterGenerate, .inverterTitleButton .selBtu {
+	background: url(/images/generate.png) no-repeat left bottom;
+	height:19px;
+	width:70px;
+	text-align:center;
+	line-height:19px;
+	text-indent:none;
+	border:none;
+	}
+.inverterGenerate:hover, .inverterTitleButton .selBtu:hover {
+	background: url(/images/generate_on.png) no-repeat left bottom;
+	}
+.generateReport {
+	background:url(/images/generateReport.png) no-repeat left top;
+	height:28px;
+	width:136px;
+	text-align:center;
+	line-height:28px;
+	color:#fff;
+	border:none;
+	}
+.generateReport:hover {
+	background:url(/images/generateReport.png) no-repeat right top;
+	height:28px;
+	width:136px;
+	text-align:center;
+	line-height:28px;
+	color:#fff;
+	border:none;
+	}
+.controlBtu button, .controlBtu .button, .dialogBtu button {
+	background:url(/images/button02.png) no-repeat left top;
+	height:28px;
+	width:106px;
+	padding:0;
+	text-align:center;
+	line-height:28px;
+	border:none;
+	}
+.controlBtu button:hover, .controlBtu .button:hover, .dialogBtu button:hover {
+	background:url(/images/button02.png) no-repeat right top;
+	}
+.controlBtu button.mainbtu, a.mainbtu, .controlBtu a.mainbtu, .dialogBtu button.mainbtu {
+	color:#fff;
+	background:url(/images/button02_on.png) no-repeat left top;
+	height:28px;
+	padding:0;
+	line-height:28px;
+	width:106px;
+	border:none;
+	}
+.controlBtu button.mainbtu:hover, a.mainbtu:hover, .controlBtu a.mainbtu:hover, .dialogBtu button.mainbtu:hover {
+	background:url(/images/button02_on.png) no-repeat right top;
+	}
+.controlmenu ul{
+	padding-bottom:1px;
+	padding-right:1px;
+	}
+.controlmenu li{
+	border-right:none;
+	}
+button.testsend {
+	margin:0;
+	padding:0;
+	height:48px;
+	line-height:48px;
+	font-weight:bold;
+	color:#fff;
+	width:106px;
+	border:none;
+	background:url(/images/testsend.png) no-repeat left bottom;
+	}
+button.testsend:hover {
+	background:url(/images/testsend.png) no-repeat right bottom;
+	}
+button.butDot {
+	font-weight:bold;
+	height:1.2em;
+	line-height:0.5em;
+	margin:0;
+	padding:0;
+	height:21px;
+	width:25px;
+	cursor:pointer;
+	border:none;
+	background:url(/images/dot.png) no-repeat left bottom;
+	}
+button.butDot:hover {
+	background:url(/images/dot.png) no-repeat right bottom;
+	}
+.map, .new {
+	padding:0;
+	width:46px;
+	height:28px;
+	line-height:28px;
+	border:none;
+	text-align:center;
+	background:url(/images/map.png) no-repeat left bottom;
+	}
+.map:hover, .new:hover {
+	background:url(/images/map.png) no-repeat right bottom;
+	}
+.newUsers {
+	padding:0;
+	width:46px;
+	height:22px;
+	line-height:22px;
+	border:none;
+	text-align:center;
+	background:url(/images/new.png) no-repeat left bottom;
+}
+.newUsers:hover {
+	background:url(/images/new.png) no-repeat right bottom;
+	}
+.mapBack {
+	padding:0;
+	width:46px;
+	height:28px;
+	line-height:28px;
+	border:none;
+	text-align:center;
+	background:url(/images/map.png) no-repeat left bottom;
+	}
+.mapBack:hover {
+	background:url(/images/map.png) no-repeat right bottom;
+	}
+.vAndI .line {
+	margin:2px auto;
+	}
+.stringPerformance .leftLabel01{
+	top:0;
+	right:-95px;
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	}
+.stringPerformance .leftLabel02{
+	top:126px;
+	right:-115px;
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	}
+.stringPerformance .leftLabel03{
+	top:272px;
+	right:-115px;
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+	}
+.stringPerformance .leftLabel01.on{
+	top:0;
+	right:-97px;
+	}
+.stringPerformance .leftLabel02.on{
+	top:122px;
+	right:-119px;
+	}
+.stringPerformance .leftLabel03.on{
+	top:268px;
+	right:-119px;
+	}
+.stringPerformance .leftLabel01 a{
+	background:url(/images/leftLabel.gif) right top no-repeat;
+	}
+.stringPerformance .leftLabel01 a:hover{
+	background:url(/images/leftLabel.gif) right -80px no-repeat;
+	}
+.stringPerformance .leftLabel02 a{
+	background:url(/images/leftLabel.gif) left bottom no-repeat;
+	}
+.stringPerformance .leftLabel02 a:hover{
+	background:url(/images/leftLabel.gif) left -80px no-repeat;
+	}
+.stringPerformance .leftLabel03 a{
+	background:url(/images/leftLabel.gif) left bottom no-repeat;
+	}
+.stringPerformance .leftLabel03 a:hover{
+	background:url(/images/leftLabel.gif) left -80px no-repeat;
+	}
+.stringPerformance .leftLabel01.on a{
+	background:url(/images/leftLabel.gif) right bottom no-repeat;
+	}
+.stringPerformance .leftLabel02.on a{
+	background:url(/images/leftLabel.gif) left top no-repeat;
+	}
+.stringPerformance .leftLabel03.on a{
+	background:url(/images/leftLabel.gif) left top no-repeat;
+	}
+button.controlOff {
+	height:33px;
+	line-height:33px;
+	width:66px;
+	padding:0;
+	border:none;
+	background:url(/images/controlbtu.png) no-repeat left top;
+	}
+button.controlOff:hover {
+	background:url(/images/controlbtu.png) no-repeat right top;
+	}
+button.controlOn {
+	height:33px;
+	line-height:33px;
+	width:66px;
+	padding:0;
+	border:none;
+	background:url(/images/controlbtu.png) no-repeat left -84px;
+	}
+button.controlOn:hover {
+	background:url(/images/controlbtu.png) no-repeat right -84px;
+	}
+button.controlNA {
+	height:33px;
+	line-height:33px;
+	width:66px;
+	padding:0;
+	border:none;
+	background:url(/images/controlbtu.png) no-repeat -167px top;
+	}
+button.conBtu {
+	border:none;
+	height:33px;
+	line-height:33px;
+	width:166px;
+	padding:0;
+	background:url(/images/controlbtu.png) no-repeat left bottom;
+	}
+.UserInfo .mod, .tableInfo .mod, .tableInfo .del {
+	margin:0.25em;
+	}
+.ticketChangeLogBottom .button {
+	background:url(/images/button03.png) no-repeat left top;
+	height:23px;
+	width:106px;
+	padding:0;
+	text-align:center;
+	line-height:23px;
+	border:none;
+	}
+.ticketChangeLogBottom .button:hover {
+	background:url(/images/button03.png) no-repeat right top;
+	}
+h3 button {
+	background:url(/images/button03.png) no-repeat left top;
+	height:23px;
+	width:106px;
+	padding:0;
+	text-align:center;
+	line-height:23px;
+	border:none;
+}
+.graphParameters button {
+	height:28px;
+	line-height:28px;
+	width:240px;
+	border:none;
+	background: url(/images/graphParameters.png) left top no-repeat;
+}
+.graphParameters button:hover {
+	background: url(/images/graphParameters.png) left bottom no-repeat;
+}
+.topInf li.info02, .topInf li.info04 {
+	height:3.85em;
+}
+button.changeTicket {
+	font-size:1em;
+	font-weight:bold;
+	height:43px;
+	line-height:43px;
+	width:200px;
+	margin:0 1em;
+	padding:0;
+	border:none;
+	color:#fff;
+	background:url(/images/changeTicket.png) no-repeat left top;
+}
+button.changeTicket:hover {
+	background:url(/images/changeTicket.png) no-repeat right top;
+}
+.controlBtu .ticket {
+	border:none;
+	background:url(/images/ticket.png) no-repeat left top;
+	}
+.controlBtu .ticket:hover {
+	background:url(/images/ticket.png) no-repeat right top;
+	}
+.userLabel a{
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#f3f3f3'); /* IE6 & IE7 */ 
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#f3f3f3')"; /* IE8 */
+	}
+.userLabel a.on{
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#42c800', endColorstr='#389107'); /* IE6 & IE7 */ 
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#42c800', endColorstr='#389107')"; /* IE8 */
+	}
+.pageGraph {
+	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#d5d5d5'); /* IE6 & IE7 */ 
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#d5d5d5')"; /* IE8 */
+	}
+.arrayInfo button.arrayGraph {
+	background:url(/images/controlbtu_bg_02.png) repeat-x top #4bc60d;
+	}
+.arrayInfo button.arrayGraph:hover {
+	background:url(/images/controlbtu_bg_01.png) repeat-x top #3dae03;
+	}
+.arrayInfo button.arrayAlarm {
+	background:url(/images/controlbtu_bg_04.png) repeat-x top #e42222;
+	}
+.arrayInfo button.arrayAlarm:hover {
+	background:url(/images/controlbtu_bg_03.png) repeat-x top #c02222;
+	}

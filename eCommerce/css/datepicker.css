@@ -1,0 +1,84 @@
+.myDatePicker {
+	color:#535353;
+	background:#fff;
+	font-family:Arial, Helvetica, sans-serif;
+	width:auto;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	font-size:12px;
+	line-height:1em;
+	font-weight:bold;
+	float:left;
+	position:relative;
+	padding:5px;
+	text-align:center;
+	}
+.myDatePicker table{
+	border:none;
+	margin:0 auto;
+	}
+.myDatePicker td{
+	padding:5px 3px;
+	border:1px solid #ddd;
+	background:#f6f6f6;
+	cursor:pointer;
+	}
+.myDatePicker td:hover {
+	background:#ddd;
+	color:#333;
+	border:1px solid #555;
+	}
+.myDatePicker .selectYear {
+	overflow:auto;
+	padding:0 20px;
+	}
+.myDatePicker .selectYear .left, .myDatePicker .selectYear .right {
+	border:1px solid #ddd;
+	background:#f6f6f6;
+	height:15px;
+	line-height:15px;
+	width:15px;
+	cursor:pointer;
+	position:absolute;
+	top:4.2em;
+	}
+.myDatePicker .selectYear .Current {
+	border:1px solid #ddd;
+	background:#f6f6f6;
+	height:15px;
+	line-height:15px;
+	width:15px;
+	cursor:pointer;
+	position:absolute;
+	top:6.2em;
+	right:.5em;
+	}
+.myDatePicker .selectYear .left {
+	left:.5em;
+	}
+.myDatePicker .selectYear .right {
+	right:.5em;
+	}
+.myDatePicker .selectMonth {
+	margin-top:5px;
+	padding-top:5px;
+	text-align:center;
+	border-top:1px solid #555555;
+	}
+.myDatePicker .selectMonth td{
+	width:16.7%;
+	text-align:right;
+	}
+.myDatePicker * .selectOn {
+	color:#333333;
+	background:#fefefe;
+	border:1px solid #555555;
+	}
+.myDatePicker .selectYear .nonePointer {
+	color:#ddd;
+	cursor:auto;
+	}
+.myDatePicker .selectMonth .nonePointer {
+	color:#ddd;
+	cursor:auto;
+	}
